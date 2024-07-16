@@ -10,17 +10,19 @@ const blogPostController = require("./controller/blogPostController.js")
 const dbConnection = require("./helper/dbConnection.js");
 const getAllBlogController = require('./controller/getAllBlogController.js');
 const multer  = require('multer')
+const path = require('path')
 dbConnection()
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './uploads')
     },
     filename: function (req, file, cb) {
-        console.log(file);
+        console.log("file",file);
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix)
+      cb(null, uniqueSuffix + '-' + file.originalname )
     }
   })
   
